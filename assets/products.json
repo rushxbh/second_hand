@@ -1,0 +1,51 @@
+[
+    {
+      "id": 1,
+      "user":"Dhairyash",
+      "location":"Mumbai",
+      "name": "Laptop",
+      "price": 55000,
+      "image": "https://5.imimg.com/data5/SELLER/Default/2023/11/359411999/AR/EW/AZ/101111/whatsapp-image-2023-11-07-at-4-06-44-pm-250x250.jpeg"
+    },
+    {
+      "id": 2,
+      "user":"Dhairyash",
+      "location":"Mumbai",
+      "name": "Smartphone",
+      "price": 25000,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjWGldmUQ83k9lzXBcv75OO7Oulct1X0YD8z8X23HH7W2T3SxcSiO7ykVJgV9gE5Eqf8k&usqp=CAU"
+    },
+    {
+      "id": 3,
+      "user":"Dhairyash",
+      "location":"Mumbai",
+      "name": "Headphones",
+      "price": 2000,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZauJn_Hd-EkQ6mks2Dtt7hKSPdU-uP72MpA&s"
+    },
+    {
+      "id": 4,
+      "user":"Dhairyash",
+      "location":"Mumbai",
+      "name": "Smartwatch",
+      "price": 5000,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbYn4M5AA7vPjmAKm9JqfVQuA7l9UYoq_CjQ&s"
+    },
+    {
+      "id": 5,
+      "user":"Dhairyash",
+      "location":"Mumbai",
+      "name": "Camera",
+      "price": 40000,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZvMN5JMizhowwNDzW7qAWPLGyguCe2cI2Aw&s"
+    },
+    {
+      "id": 6,
+      "user":"Dhairyash",
+      "location":"Mumbai",
+      "name": "PS5",
+      "price": 30000,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2hHtfG0UY2L5Y262o_MKUP3tXL5fA_mYyWg&s"
+    }
+  ]
+  
