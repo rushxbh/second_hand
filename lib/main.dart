@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:traderhub/main_screen.dart';
+import 'package:traderhub/profile_page.dart';
 import 'home_page.dart';
 import 'auth_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,10 +25,10 @@ class BarterApp extends StatelessWidget {
         primarySwatch: Colors.green,
         scaffoldBackgroundColor: Colors.green[50],
       ),
-      initialRoute: '/',
+      initialRoute: '/auth',
       routes: {
-        '/': (context) => const AuthPage(),
-        '/home': (context) => const HomePage(),
+        '/auth': (context) => const AuthPage(),
+       '/main': (context) => const MainScreen(), // Wrapper with bottom nav
       },
     );
   }

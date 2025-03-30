@@ -61,6 +61,8 @@ class AuthPageState extends State<AuthPage> {
         user = await _authService.signUp(
           _emailController.text.trim(),
           _passwordController.text.trim(),
+          _nameController.text.trim(),
+          _cityController.text.trim()
         );
       }
 
@@ -84,7 +86,7 @@ class AuthPageState extends State<AuthPage> {
     try {
       User? user = await _authService.signInWithGoogle();
       if (user != null) {
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushReplacementNamed(context, '/main');
       } else {
         setState(() => _errorMessage = "Google sign-in cancelled.");
       }
