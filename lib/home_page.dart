@@ -17,24 +17,24 @@ class _HomePageState extends State<HomePage> {
   bool _isLoading = true;
   int _currentBannerIndex = 0;
 
-  // Banner facts about the app
+  // Banner facts about the app - colors updated to match auth page
   final List<Map<String, dynamic>> _bannerFacts = [
     {
       'title': 'Second Hand Sustainably',
       'subtitle': 'Join 10,000+ users reducing waste through trading',
-      'color': const Color.fromARGB(255, 99, 168, 97),
+      'color': const Color(0xFF6A1B9A),
       'icon': Icons.eco
     },
     {
       'title': 'Secure Transactions',
       'subtitle': 'Every trade is protected by our secure platform',
-      'color': const Color.fromARGB(255, 91, 239, 202),
+      'color': const Color(0xFF4527A0),
       'icon': Icons.security
     },
     {
       'title': 'Save Money',
       'subtitle': 'Users save ₹2,000 on average per month',
-      'color': const Color.fromARGB(255, 47, 230, 34),
+      'color': const Color(0xFF7B1FA2),
       'icon': Icons.savings
     },
   ];
@@ -77,19 +77,22 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: const Color(0xFFF8F9FA),
       body: RefreshIndicator(
         onRefresh: _loadItems,
+        color: const Color(0xFF6A1B9A),
         child: CustomScrollView(
           slivers: [
-            // App Bar
+            // App Bar - Updated to match auth page
             SliverAppBar(
               expandedHeight: 60,
               floating: true,
               pinned: true,
-              backgroundColor: const Color.fromARGB(255, 26, 166, 11),
+              backgroundColor: const Color(0xFF6A1B9A),
               title: const Text(
                 "Thrifty",
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  letterSpacing: 1.2,
                 ),
               ),
               actions: [
@@ -124,8 +127,11 @@ class _HomePageState extends State<HomePage> {
           highlightColor: Colors.grey[100]!,
           child: Container(
             height: 180,
-            width: double.infinity,
-            color: Colors.white,
+            margin: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Colors.white,
+            ),
           ),
         ),
 
@@ -140,35 +146,15 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               height: 24,
               width: 150,
-              color: Colors.white,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.white,
+              ),
             ),
           ),
         ),
 
         const SizedBox(height: 10),
-
-        // Loading carousel items
-        Shimmer.fromColors(
-          baseColor: Colors.grey[300]!,
-          highlightColor: Colors.grey[100]!,
-          child: Container(
-            height: 200,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 3,
-              itemBuilder: (context, index) {
-                return Container(
-                  width: 150,
-                  margin: const EdgeInsets.only(right: 12),
-                  color: Colors.white,
-                );
-              },
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 20),
 
         // Loading grid items
         Padding(
@@ -179,20 +165,26 @@ class _HomePageState extends State<HomePage> {
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               childAspectRatio: 0.75,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
             ),
             itemCount: 4,
             itemBuilder: (context, index) {
               return Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!,
-                  child: Container(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
                     color: Colors.white,
-                  ));
+                  ),
+                ),
+              );
             },
           ),
         ),
+        
+        const SizedBox(height: 20),
       ],
     );
   }
@@ -205,13 +197,15 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(height: 100),
-            Icon(Icons.inventory_2_outlined, size: 80, color: Colors.grey[400]),
+            Icon(Icons.inventory_2_outlined, 
+                size: 80, 
+                color: const Color(0xFF6A1B9A).withOpacity(0.5)),
             const SizedBox(height: 16),
             Text(
               "No items available",
               style: TextStyle(
                 fontSize: 18,
-                color: Colors.grey[600],
+                color: const Color(0xFF6A1B9A),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -220,7 +214,27 @@ class _HomePageState extends State<HomePage> {
               "Be the first to add an item!",
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey[500],
+                color: Colors.grey[600],
+              ),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF6A1B9A),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 3,
+              ),
+              child: const Text(
+                "Add Item",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],
@@ -231,13 +245,80 @@ class _HomePageState extends State<HomePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Banner section with facts
-        _buildFactsBanner(),
+        const SizedBox(height: 16),
+        
+        // Welcome message - added to match auth page style
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Text(
+            "Welcome to Thrifty!",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xFF6A1B9A),
+              shadows: [
+                Shadow(
+                  color: Colors.black.withOpacity(0.1),
+                  offset: const Offset(0, 1),
+                  blurRadius: 2,
+                ),
+              ],
+            ),
+          ),
+        ),
+        
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Text(
+            "Find great deals on pre-loved items",
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey[600],
+            ),
+          ),
+        ),
+        
+        const SizedBox(height: 20),
+
+        // Banner section with facts - updated with rounded corners
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: _buildFactsBanner(),
+        ),
 
         const SizedBox(height: 24),
 
-        // Featured items carousel
-      
+        // Items grid title
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Latest Items",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF6A1B9A),
+                ),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  "View All",
+                  style: TextStyle(
+                    color: const Color(0xFF4527A0),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        
+        const SizedBox(height: 8),
+        
+        // Items grid - updated with more shadow and rounded corners
         _buildItemsGrid(),
 
         const SizedBox(height: 20),
@@ -270,23 +351,48 @@ class _HomePageState extends State<HomePage> {
                   gradient: LinearGradient(
                     colors: [
                       fact['color'],
-                      fact['color'].withOpacity(0.7),
+                      fact['color'].withOpacity(0.8),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
                 ),
                 child: Stack(
                   children: [
-                    // Background pattern (circles)
+                    // Background pattern (circles) - added to match auth page style
                     Positioned(
-                      child: Icon(
-                        fact['icon'],
-                        size: 180,
-                        color: Colors.white.withOpacity(0.2),
+                      top: -50,
+                      right: -50,
+                      child: Container(
+                        width: 150,
+                        height: 150,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white.withOpacity(0.1),
+                        ),
                       ),
                     ),
+                    Positioned(
+                      bottom: -80,
+                      left: -30,
+                      child: Container(
+                        width: 180,
+                        height: 180,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white.withOpacity(0.08),
+                        ),
+                      ),
+                    ),
+                    
                     // Content
                     Padding(
                       padding: const EdgeInsets.all(24.0),
@@ -306,6 +412,7 @@ class _HomePageState extends State<HomePage> {
                               color: Colors.white,
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
+                              letterSpacing: 0.5,
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -329,155 +436,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Color(0xFF1E3A8A),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFeaturedItemsCarousel() {
-    // Get 5 random items for the featured carousel
-    final featuredItems = List<Map<String, dynamic>>.from(_items)..shuffle();
-    final displayItems = featuredItems.take(5).toList();
-    return Container(
-      height: 220,
-      child: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        scrollDirection: Axis.horizontal,
-        itemCount: displayItems.length,
-        itemBuilder: (context, index) {
-          final item = displayItems[index];
-          final user = item['userDetails'] ?? {};
-          print(item);
-          // print(item);
-          return GestureDetector(
-            onTap: () {
-              // Navigate to product details
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProductDetailPage(
-                    product: {
-                      'id': item['id'],
-                      'name': item['item_name'] ?? "No Name",
-                      'image': item['image'] ?? "",
-                      'price': item['original_cost'] ?? "0",
-                      'user': user['name'] ?? "Unknown",
-                      'userId': item['user'],
-                      'description': item['description'],
-                      'location': user['city'] ?? "No Location",
-                    },
-                  ),
-                ),
-              );
-            },
-            child: Container(
-              width: 160,
-              margin: const EdgeInsets.only(right: 12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Item image
-                  ClipRRect(
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(12)),
-                    child: item['image'] != null
-                        ? Image.network(
-                            item['image'],
-                            height: 120,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Container(
-                              height: 120,
-                              color: Colors.grey[200],
-                              child: const Icon(Icons.image_not_supported,
-                                  color: Colors.grey),
-                            ),
-                          )
-                        : Container(
-                            height: 120,
-                            color: Colors.grey[200],
-                            child: const Icon(Icons.image, color: Colors.grey),
-                          ),
-                  ),
-                  // Item details
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          item['item_name'] ?? "No Name",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          "₹${item['original_cost'] ?? '0'}",
-                          style: const TextStyle(
-                            color: Color(0xFF1E3A8A),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.person,
-                              size: 12,
-                              color: Colors.grey,
-                            ),
-                            const SizedBox(width: 4),
-                            Expanded(
-                              child: Text(
-                                user['name'] ?? "Unknown",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey[700],
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
   Widget _buildItemsGrid() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -487,7 +445,7 @@ class _HomePageState extends State<HomePage> {
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 0.75,
-          crossAxisSpacing: 10,
+          crossAxisSpacing: 16,
           mainAxisSpacing: 16,
         ),
         itemCount: _items.length.clamp(0, 6), // Show up to 6 items in grid
@@ -519,12 +477,12 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 15,
+                    offset: const Offset(0, 5),
                   ),
                 ],
               ),
@@ -534,7 +492,7 @@ class _HomePageState extends State<HomePage> {
                   // Item image
                   ClipRRect(
                     borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(12)),
+                        const BorderRadius.vertical(top: Radius.circular(20)),
                     child: item['image'] != null
                         ? Image.network(
                             item['image'],
@@ -552,12 +510,14 @@ class _HomePageState extends State<HomePage> {
                         : Container(
                             height: 130,
                             color: Colors.grey[200],
-                            child: const Icon(Icons.image, color: Colors.grey),
+                            child: Icon(Icons.image, 
+                                color: const Color(0xFF6A1B9A).withOpacity(0.3),
+                                size: 40),
                           ),
                   ),
                   // Item details
                   Padding(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(12),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -574,7 +534,7 @@ class _HomePageState extends State<HomePage> {
                         Text(
                           "₹${item['original_cost'] ?? '0'}",
                           style: const TextStyle(
-                            color: Color(0xFF1E3A8A),
+                            color: Color(0xFF6A1B9A),
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),

@@ -6,10 +6,13 @@ import 'package:url_launcher/url_launcher.dart';
 class ProductDetailPage extends StatelessWidget {
   final Map<String, dynamic> product;
   final TextEditingController _amountController = TextEditingController();
+  
   ProductDetailPage({Key? key, required this.product}) : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
-  print(product);
+    print(product);
+    
     Future<void> _createTradeRequest(
         String offeredItemId, String requestedItemId) async {
       final currentUser = FirebaseAuth.instance.currentUser;
@@ -40,286 +43,330 @@ class ProductDetailPage extends StatelessWidget {
       final currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser == null) return;
 
-    showDialog(
-  context: context,
-  builder: (context) => AlertDialog(
-    title: const Text('Place your Offer'),
-    content: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Text('Enter the amount you want to offer:'),
-        TextField(
-          keyboardType: TextInputType.number,
-          controller: _amountController,
-          decoration: const InputDecoration(
-            hintText: 'Enter amount',
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            'Place your Offer',
+            style: TextStyle(
+              color: Color.fromARGB(255, 30, 138, 44),
+              fontWeight: FontWeight.bold,
+            ),
           ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Enter the amount you want to offer:'),
+              const SizedBox(height: 12),
+              TextField(
+                keyboardType: TextInputType.number,
+                controller: _amountController,
+                decoration: const InputDecoration(
+                  hintText: 'Enter amount',
+                  prefixIcon: Icon(Icons.currency_rupee, color: Color.fromARGB(255, 30, 138, 44)),
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color.fromARGB(255, 30, 138, 44), width: 2),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final amount = _amountController.text;
+                _createTradeRequest(amount, product['id']);
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 30, 138, 44),
+              ),
+              child: const Text('Offer'),
+            ),
+          ],
         ),
-      ],
-    ),
-    actions: [
-      TextButton(
-        onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
-      ),
-      TextButton(
-        onPressed: () {
-          final amount = _amountController.text;
-          // if ( amount > 0) {
-            _createTradeRequest(amount, product['id']);
-            Navigator.pop(context);
-          
-        },
-        child: const Text('Offer'),
-      ),
-    ],
-  ),
-);
-
+      );
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: CustomScrollView(
-        slivers: [
-          // Sliver app bar with image
-          SliverAppBar(
-            expandedHeight: 300,
-            pinned: true,
-            backgroundColor: const Color(0xFF1E3A8A),
-            leading: IconButton(
-              icon: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.9),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.arrow_back, color: Colors.black87),
-              ),
-              onPressed: () => Navigator.pop(context),
-            ),
-            actions: [
-              IconButton(
-                icon: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
-                    shape: BoxShape.circle,
-                  ),
-                  child:
-                      const Icon(Icons.favorite_border, color: Colors.black87),
-                ),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.share, color: Colors.black87),
-                ),
-                onPressed: () {},
-              ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.topCenter, // We only want the top part to be green
+            colors: [
+              const Color.fromARGB(255, 30, 138, 44),
+              const Color.fromARGB(255, 30, 138, 44),
             ],
-            flexibleSpace: FlexibleSpaceBar(
-              background: Stack(
-                fit: StackFit.expand,
-                children: [
-                  // Product image
-                  product['image'] != null && product['image'].isNotEmpty
-                      ? Image.network(
-                          product['image'],
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Container(
+          ),
+        ),
+        child: CustomScrollView(
+          slivers: [
+            // Sliver app bar with image
+            SliverAppBar(
+              expandedHeight: 300,
+              pinned: true,
+              backgroundColor: const Color.fromARGB(255, 30, 138, 44),
+              leading: IconButton(
+                icon: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.9),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.arrow_back, color: Colors.black87),
+                ),
+                onPressed: () => Navigator.pop(context),
+              ),
+              actions: [
+                IconButton(
+                  icon: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.9),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.favorite_border, color: Colors.black87),
+                  ),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  icon: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.9),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.share, color: Colors.black87),
+                  ),
+                  onPressed: () {},
+                ),
+              ],
+              flexibleSpace: FlexibleSpaceBar(
+                background: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    // Product image
+                    product['image'] != null && product['image'].isNotEmpty
+                        ? Image.network(
+                            product['image'],
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Container(
+                              color: Colors.grey[300],
+                              child: const Icon(Icons.image_not_supported,
+                                  size: 80, color: Colors.grey),
+                            ),
+                          )
+                        : Container(
                             color: Colors.grey[300],
-                            child: const Icon(Icons.image_not_supported,
+                            child: const Icon(Icons.image,
                                 size: 80, color: Colors.grey),
                           ),
-                        )
-                      : Container(
-                          color: Colors.grey[300],
-                          child: const Icon(Icons.image,
-                              size: 80, color: Colors.grey),
+                    // Gradient overlay for better text visibility
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.transparent,
+                            Colors.black.withOpacity(0.4),
+                          ],
+                          stops: const [0.7, 1.0],
                         ),
-                  // Gradient overlay for better text visibility
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.transparent,
-                          Colors.black.withOpacity(0.4),
-                        ],
-                        stops: const [0.7, 1.0],
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
 
-          // Product details
-          SliverToBoxAdapter(
-            child: Container(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // Product details
+            SliverToBoxAdapter(
+              child: Card(
+                margin: const EdgeInsets.all(0),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(24),
+                    topRight: Radius.circular(24),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Product name
-                      Expanded(
-                        child: Text(
-                          product['name'] ?? "Unknown Product",
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF333333),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Product name
+                          Expanded(
+                            child: Text(
+                              product['name'] ?? "Unknown Product",
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF333333),
+                              ),
+                            ),
                           ),
-                        ),
+                          // Price tag
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 30, 138, 44),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              "₹${product['price']}",
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      // Price tag
+
+                      const SizedBox(height: 16),
+
+                      // Seller information
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1E3A8A),
-                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.grey[50],
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey.shade200),
                         ),
-                        child: Text(
-                          "₹${product['price']}",
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                        child: Row(
+                          children: [
+                            // Seller avatar
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 30, 138, 44).withOpacity(0.1),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Center(
+                                child: Icon(Icons.person,
+                                    color: Color.fromARGB(255, 30, 138, 44), size: 30),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            // Seller details
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    product['user'] ?? "Unknown Seller",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    product['location'] ?? "Unknown location",
+                                    style: TextStyle(
+                                      color: Colors.grey[700],
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // Contact button
+                            Container(
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 30, 138, 44).withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: IconButton(
+                                icon: const Icon(Icons.message_outlined,
+                                    color: Color.fromARGB(255, 30, 138, 44)),
+                                onPressed: () {},
+                              ),
+                            ),
+                          ],
                         ),
                       ),
+
+                      const SizedBox(height: 24),
+
+                      // Product description section
+                      const Text(
+                        "About this item",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 30, 138, 44),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        product['description'] ??
+                            "This is a premium quality item available for trade. The item is in good condition and ready for a new owner.",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey[700],
+                          height: 1.5,
+                        ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // Trading information
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 30, 138, 44).withOpacity(0.05),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: const Color.fromARGB(255, 30, 138, 44).withOpacity(0.2),
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Trading Information",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 30, 138, 44),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            _buildInfoRow(
+                                Icons.calendar_today, "Listed", "3 days ago"),
+                            _buildInfoRow(Icons.visibility, "Views", "24"),
+                            _buildInfoRow(
+                                Icons.touch_app, "Interested", "5 people"),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 40),
                     ],
                   ),
-
-                  const SizedBox(height: 16),
-
-                  // Seller information
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[50],
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.grey.shade200),
-                    ),
-                    child: Row(
-                      children: [
-                        // Seller avatar
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF1E3A8A).withOpacity(0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Center(
-                            child: Icon(Icons.person,
-                                color: Color(0xFF1E3A8A), size: 30),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        // Seller details
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                product['user'] ?? "Unknown Seller",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                product['location'] ?? "Unknown location",
-                                style: TextStyle(
-                                  color: Colors.grey[700],
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        // Contact button
-                        IconButton(
-                          icon: const Icon(Icons.message_outlined,
-                              color: Color(0xFF1E3A8A)),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // Product description section
-                  const Text(
-                    "About this item",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF333333),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    product['description']??"This is a premium quality item available for trade. The item is in good condition and ready for a new owner.",
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey[700],
-                      height: 1.5,
-                    ),
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // Trading information
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF1E3A8A).withOpacity(0.05),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Trading Information",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF1E3A8A),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        _buildInfoRow(
-                            Icons.calendar_today, "Listed", "3 days ago"),
-                        _buildInfoRow(Icons.visibility, "Views", "24"),
-                        _buildInfoRow(
-                            Icons.touch_app, "Interested", "5 people"),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 40),
-                ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -338,21 +385,21 @@ class ProductDetailPage extends StatelessWidget {
           children: [
             // Chat button
             Expanded(
-  flex: 1,
-  child: OutlinedButton.icon(
-    onPressed: () {
-      final Uri whatsappUrl = Uri.parse("https://wa.me/918856875861");
-      launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
-    },
-    icon: const Icon(Icons.chat_bubble_outline),
-    label: const Text("Chat"),
-    style: OutlinedButton.styleFrom(
-      foregroundColor: const Color(0xFF1E3A8A),
-      side: const BorderSide(color: Color(0xFF1E3A8A)),
-      padding: const EdgeInsets.symmetric(vertical: 12),
-    ),
-  ),
-),
+              flex: 1,
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  final Uri whatsappUrl = Uri.parse("https://wa.me/918856875861");
+                  launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
+                },
+                icon: const Icon(Icons.chat_bubble_outline),
+                label: const Text("Chat"),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: const Color.fromARGB(255, 30, 138, 44),
+                  side: const BorderSide(color: Color.fromARGB(255, 30, 138, 44)),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+              ),
+            ),
             const SizedBox(width: 12),
             // Make offer button
             Expanded(
@@ -364,9 +411,12 @@ class ProductDetailPage extends StatelessWidget {
                 icon: const Icon(Icons.handshake_outlined),
                 label: const Text("Buy"),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1E3A8A),
+                  backgroundColor: const Color.fromARGB(255, 30, 138, 44),
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
               ),
             ),
@@ -381,7 +431,7 @@ class ProductDetailPage extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: const Color(0xFF1E3A8A)),
+          Icon(icon, size: 16, color: const Color.fromARGB(255, 30, 138, 44)),
           const SizedBox(width: 8),
           Text(
             "$label: ",

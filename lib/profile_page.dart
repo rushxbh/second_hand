@@ -67,13 +67,14 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Profile"),
+          backgroundColor: const Color.fromARGB(255, 30, 138, 44),
+          foregroundColor: Colors.white,
           actions: [
             IconButton(
               icon: const Icon(Icons.add_box_outlined),
               onPressed: () => Navigator.pushNamed(context, '/post-item'),
-              color: Color(0xFFFFFFFF),
+              color: Colors.white,
             ),
-            // In the AppBar actions, add this before the logout button:
             IconButton(
               icon: const Icon(Icons.swap_horiz),
               onPressed: () => Navigator.push(
@@ -100,15 +101,23 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
           children: [
             Container(
-              color: const Color(0xFF1E3A8A),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    const Color.fromARGB(255, 30, 138, 44),
+                    const Color.fromARGB(255, 30, 138, 44).withOpacity(0.8),
+                  ],
+                ),
+              ),
               padding: const EdgeInsets.all(24),
               child: Column(
                 children: [
                   const CircleAvatar(
                     radius: 50,
                     backgroundColor: Colors.white,
-                    child:
-                        Icon(Icons.person, size: 50, color: Color(0xFF1E3A8A)),
+                    child: Icon(Icons.person, size: 50, color: Color.fromARGB(255, 30, 138, 44)),
                   ),
                   const SizedBox(height: 16),
                   Text(
@@ -128,6 +137,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Column(
@@ -146,6 +159,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             decoration: const InputDecoration(
                               labelText: "Name",
                               prefixIcon: Icon(Icons.person_outline),
+                              border: OutlineInputBorder(),
                             ),
                           ),
                           const SizedBox(height: 16),
@@ -154,13 +168,22 @@ class _ProfilePageState extends State<ProfilePage> {
                             decoration: const InputDecoration(
                               labelText: "City",
                               prefixIcon: Icon(Icons.location_city),
+                              border: OutlineInputBorder(),
                             ),
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 24),
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: _updateUserProfile,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color.fromARGB(255, 30, 138, 44),
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
                               child: const Text("Update Profile"),
                             ),
                           ),

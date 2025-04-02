@@ -20,6 +20,7 @@ class _PostItemPageState extends State<PostItemPage> {
   final TextEditingController _descriptionController = TextEditingController();
   File? _image;
   bool _isLoading = false;
+
   Future<String> _uploadImageToCloudinary(File imageFile) async {
     try {
       String cloudName = "dke7f8nkt"; // Your Cloudinary cloud name
@@ -28,8 +29,7 @@ class _PostItemPageState extends State<PostItemPage> {
 
       var request = http.MultipartRequest("POST", Uri.parse(apiUrl));
       request.fields['upload_preset'] = uploadPreset;
-      request.files
-          .add(await http.MultipartFile.fromPath('file', imageFile.path));
+      request.files.add(await http.MultipartFile.fromPath('file', imageFile.path));
 
       var response = await request.send();
       var responseData = await response.stream.bytesToString();
@@ -46,42 +46,42 @@ class _PostItemPageState extends State<PostItemPage> {
       return "";
     }
   }
+
   Future<void> _pickImage() async {
-  final ImagePicker picker = ImagePicker();
+    final ImagePicker picker = ImagePicker();
 
-  final XFile? image = await showDialog<XFile>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Choose Image Source'),
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(
-              icon: const Icon(Icons.camera_alt, size: 40),
-              onPressed: () async {
-                final XFile? pickedImage = await picker.pickImage(source: ImageSource.camera);
-                Navigator.pop(context, pickedImage);
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.photo_library, size: 40),
-              onPressed: () async {
-                final XFile? pickedImage = await picker.pickImage(source: ImageSource.gallery);
-                Navigator.pop(context, pickedImage);
-              },
-            ),
-          ],
-        ),
-      );
-    },
-  );
+    final XFile? image = await showDialog<XFile>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Choose Image Source'),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.camera_alt, size: 40, color: Color.fromARGB(255, 30, 138, 44)),
+                onPressed: () async {
+                  final XFile? pickedImage = await picker.pickImage(source: ImageSource.camera);
+                  Navigator.pop(context, pickedImage);
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.photo_library, size: 40, color: Color.fromARGB(255, 30, 138, 44)),
+                onPressed: () async {
+                  final XFile? pickedImage = await picker.pickImage(source: ImageSource.gallery);
+                  Navigator.pop(context, pickedImage);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
 
-  if (image != null) {
-    setState(() => _image = File(image.path));
+    if (image != null) {
+      setState(() => _image = File(image.path));
+    }
   }
-}
-
 
   Future<void> _postItem() async {
     if (!_formKey.currentState!.validate() || _image == null) {
@@ -115,92 +115,201 @@ class _PostItemPageState extends State<PostItemPage> {
     }
   }
 
-  // Your existing _uploadImageToCloudinary method here
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Post New Item'),
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              Container(
-                height: 200,
-                width: double.infinity,
-                color: Colors.grey[100],
-                child: _image == null
-                    ? IconButton(
-                        icon: const Icon(Icons.add_photo_alternate, size: 50),
-                        onPressed: _pickImage,
-                      )
-                    : Stack(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              const Color.fromARGB(255, 30, 138, 44),
+              const Color.fromARGB(255, 30, 138, 44).withOpacity(0.8),
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // App Bar with back button
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back, color: Colors.white),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      const Text(
+                        'Post New Item',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                
+                // Main Card Content
+                Card(
+                  margin: const EdgeInsets.all(20),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.file(_image!, fit: BoxFit.cover, width: double.infinity),
-                          Positioned(
-                            right: 8,
-                            top: 8,
-                            child: IconButton(
-                              icon: const Icon(Icons.edit),
-                              onPressed: _pickImage,
+                          const Text(
+                            'Item Details',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 30, 138, 44),
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          
+                          // Image Picker
+                          GestureDetector(
+                            onTap: _pickImage,
+                            child: Container(
+                              height: 200,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[100],
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.grey.shade300),
+                              ),
+                              child: _image == null
+                                  ? Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: const [
+                                        Icon(
+                                          Icons.add_photo_alternate,
+                                          size: 50,
+                                          color: Color.fromARGB(255, 30, 138, 44),
+                                        ),
+                                        SizedBox(height: 8),
+                                        Text(
+                                          'Add Item Photo',
+                                          style: TextStyle(
+                                            color: Color.fromARGB(255, 30, 138, 44),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : Stack(
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(12),
+                                          child: Image.file(
+                                            _image!,
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                          ),
+                                        ),
+                                        Positioned(
+                                          right: 8,
+                                          top: 8,
+                                          child: CircleAvatar(
+                                            backgroundColor: Colors.white.withOpacity(0.8),
+                                            radius: 16,
+                                            child: IconButton(
+                                              iconSize: 18,
+                                              padding: EdgeInsets.zero,
+                                              icon: const Icon(Icons.edit, color: Color.fromARGB(255, 30, 138, 44)),
+                                              onPressed: _pickImage,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                            ),
+                          ),
+                          
+                          const SizedBox(height: 24),
+                          
+                          // Form Fields
+                          TextFormField(
+                            controller: _itemNameController,
+                            decoration: const InputDecoration(
+                              labelText: 'Item Name',
+                              prefixIcon: Icon(Icons.inventory, color: Color.fromARGB(255, 30, 138, 44)),
+                              border: OutlineInputBorder(),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Color.fromARGB(255, 30, 138, 44), width: 2),
+                              ),
+                            ),
+                            validator: (value) => value?.isEmpty ?? true ? 'Required' : null,
+                          ),
+                          
+                          const SizedBox(height: 16),
+                          
+                          TextFormField(
+                            controller: _itemCostController,
+                            decoration: const InputDecoration(
+                              labelText: 'Original Cost',
+                              prefixIcon: Icon(Icons.currency_rupee, color: Color.fromARGB(255, 30, 138, 44)),
+                              border: OutlineInputBorder(),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Color.fromARGB(255, 30, 138, 44), width: 2),
+                              ),
+                            ),
+                            keyboardType: TextInputType.number,
+                            validator: (value) => value?.isEmpty ?? true ? 'Required' : null,
+                          ),
+                          
+                          const SizedBox(height: 16),
+                          
+                          TextFormField(
+                            controller: _descriptionController,
+                            decoration: const InputDecoration(
+                              labelText: 'Description',
+                              prefixIcon: Icon(Icons.description, color: Color.fromARGB(255, 30, 138, 44)),
+                              border: OutlineInputBorder(),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Color.fromARGB(255, 30, 138, 44), width: 2),
+                              ),
+                            ),
+                            maxLines: 3,
+                            validator: (value) => value?.isEmpty ?? true ? 'Required' : null,
+                          ),
+                          
+                          const SizedBox(height: 32),
+                          
+                          // Post Button
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: _isLoading ? null : _postItem,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color.fromARGB(255, 30, 138, 44),
+                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: _isLoading
+                                  ? const CircularProgressIndicator(color: Colors.white)
+                                  : const Text(
+                                      'Post Item',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
                             ),
                           ),
                         ],
                       ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _itemNameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Item Name',
-                        prefixIcon: Icon(Icons.inventory),
-                      ),
-                      validator: (value) =>
-                          value?.isEmpty ?? true ? 'Required' : null,
                     ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _itemCostController,
-                      decoration: const InputDecoration(
-                        labelText: 'Original Cost',
-                        prefixIcon: Icon(Icons.currency_rupee),
-                      ),
-                      keyboardType: TextInputType.number,
-                      validator: (value) =>
-                          value?.isEmpty ?? true ? 'Required' : null,
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _descriptionController,
-                      decoration: const InputDecoration(
-                        labelText: 'Description',
-                        prefixIcon: Icon(Icons.description),
-                      ),
-                      maxLines: 3,
-                      validator: (value) =>
-                          value?.isEmpty ?? true ? 'Required' : null,
-                    ),
-                    const SizedBox(height: 24),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: _isLoading ? null : _postItem,
-                        child: _isLoading
-                            ? const CircularProgressIndicator()
-                            : const Text('Post Item'),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
