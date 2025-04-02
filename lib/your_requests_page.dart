@@ -23,9 +23,9 @@ class _YourRequestsPageState extends State<YourRequestsPage> {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      throw 'Could not launch UPI payment';
+      throw 'Could not launch UPI';
     }
-  }
+  } 
 
   @override
   Widget build(BuildContext context) {
