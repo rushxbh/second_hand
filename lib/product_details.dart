@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductDetailPage extends StatelessWidget {
   final Map<String, dynamic> product;
-
-  const ProductDetailPage({Key? key, required this.product}) : super(key: key);
+  final TextEditingController _amountController = TextEditingController();
+  ProductDetailPage({Key? key, required this.product}) : super(key: key);
   @override
   Widget build(BuildContext context) {
   print(product);
@@ -26,11 +27,11 @@ class ProductDetailPage extends StatelessWidget {
 
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Trade request sent successfully!')),
+          const SnackBar(content: Text('Buy request sent!')),
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error sending trade request: $e')),
+          SnackBar(content: Text('Oops! Request not Sent: $e')),
         );
       }
     }
@@ -39,57 +40,42 @@ class ProductDetailPage extends StatelessWidget {
       final currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser == null) return;
 
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Select Item to Trade'),
-          content: SizedBox(
-            width: double.maxFinite,
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('items')
-                  .where('user', isEqualTo: currentUser.uid)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return const Text('Something went wrong');
-                }
-
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                final items = snapshot.data?.docs ?? [];
-                print(items[0].id);
-                print(product);
-                if (items.isEmpty) {
-                  return const Text('You have no items to trade');
-                }
-
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    final item = items[index].data() as Map<String, dynamic>;
-                    return ListTile(
-                      leading: item['image'] != null
-                          ? Image.network(
-                              item['image'],
-                              width: 50,
-                              height: 50,
-                              fit: BoxFit.cover,
-                            )
-                          : const Icon(Icons.image),
-                      title: Text(item['item_name'] ?? 'Unknown Item'),
-                      onTap: () =>_createTradeRequest(items[index].id, product['id']),
-                    );
-                  },
-                );
-              },
-            ),
+    showDialog(
+  context: context,
+  builder: (context) => AlertDialog(
+    title: const Text('Place your Offer'),
+    content: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text('Enter the amount you want to offer:'),
+        TextField(
+          keyboardType: TextInputType.number,
+          controller: _amountController,
+          decoration: const InputDecoration(
+            hintText: 'Enter amount',
           ),
         ),
-      );
+      ],
+    ),
+    actions: [
+      TextButton(
+        onPressed: () => Navigator.pop(context),
+        child: const Text('Cancel'),
+      ),
+      TextButton(
+        onPressed: () {
+          final amount = _amountController.text;
+          // if ( amount > 0) {
+            _createTradeRequest(amount, product['id']);
+            Navigator.pop(context);
+          
+        },
+        child: const Text('Offer'),
+      ),
+    ],
+  ),
+);
+
     }
 
     return Scaffold(
@@ -352,18 +338,21 @@ class ProductDetailPage extends StatelessWidget {
           children: [
             // Chat button
             Expanded(
-              flex: 1,
-              child: OutlinedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.chat_bubble_outline),
-                label: const Text("Chat"),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(0xFF1E3A8A),
-                  side: const BorderSide(color: Color(0xFF1E3A8A)),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-              ),
-            ),
+  flex: 1,
+  child: OutlinedButton.icon(
+    onPressed: () {
+      final Uri whatsappUrl = Uri.parse("https://wa.me/918856875861");
+      launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
+    },
+    icon: const Icon(Icons.chat_bubble_outline),
+    label: const Text("Chat"),
+    style: OutlinedButton.styleFrom(
+      foregroundColor: const Color(0xFF1E3A8A),
+      side: const BorderSide(color: Color(0xFF1E3A8A)),
+      padding: const EdgeInsets.symmetric(vertical: 12),
+    ),
+  ),
+),
             const SizedBox(width: 12),
             // Make offer button
             Expanded(
@@ -373,7 +362,7 @@ class ProductDetailPage extends StatelessWidget {
                   _showTradeDialog(context);
                 },
                 icon: const Icon(Icons.handshake_outlined),
-                label: const Text("Make Offer"),
+                label: const Text("Buy"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF1E3A8A),
                   foregroundColor: Colors.white,

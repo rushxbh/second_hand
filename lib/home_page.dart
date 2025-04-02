@@ -20,21 +20,21 @@ class _HomePageState extends State<HomePage> {
   // Banner facts about the app
   final List<Map<String, dynamic>> _bannerFacts = [
     {
-      'title': 'Trade Sustainably',
+      'title': 'Second Hand Sustainably',
       'subtitle': 'Join 10,000+ users reducing waste through trading',
-      'color': const Color(0xFF7AB356),
+      'color': const Color.fromARGB(255, 99, 168, 97),
       'icon': Icons.eco
     },
     {
       'title': 'Secure Transactions',
       'subtitle': 'Every trade is protected by our secure platform',
-      'color': const Color(0xFF5B8DEF),
+      'color': const Color.fromARGB(255, 91, 239, 202),
       'icon': Icons.security
     },
     {
       'title': 'Save Money',
       'subtitle': 'Users save ₹2,000 on average per month',
-      'color': const Color(0xFFE67E22),
+      'color': const Color.fromARGB(255, 47, 230, 34),
       'icon': Icons.savings
     },
   ];
@@ -84,9 +84,9 @@ class _HomePageState extends State<HomePage> {
               expandedHeight: 60,
               floating: true,
               pinned: true,
-              backgroundColor: const Color(0xFF1E3A8A),
+              backgroundColor: const Color.fromARGB(255, 26, 166, 11),
               title: const Text(
-                "TraderHub",
+                "Thrifty",
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -237,37 +237,7 @@ class _HomePageState extends State<HomePage> {
         const SizedBox(height: 24),
 
         // Featured items carousel
-        _buildSectionTitle("Featured Items"),
-
-        const SizedBox(height: 12),
-
-        _buildFeaturedItemsCarousel(),
-
-        const SizedBox(height: 24),
-
-        // All items grid
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildSectionTitle("All Items"),
-              TextButton(
-                onPressed: () {},
-                child: const Text(
-                  "See All",
-                  style: TextStyle(
-                    color: Color(0xFF1E3A8A),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
+      
         _buildItemsGrid(),
 
         const SizedBox(height: 20),

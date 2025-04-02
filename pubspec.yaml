@@ -1,4 +1,4 @@
-name: traderhub
+name: Thrifty
 description: A Flutter app for a barter system with authentication.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -21,6 +21,7 @@ dependencies:
   firebase_storage: ^12.4.4
   carousel_slider: ^5.0.0
   shimmer: ^3.0.0
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:

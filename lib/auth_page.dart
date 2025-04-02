@@ -106,8 +106,8 @@ class AuthPageState extends State<AuthPage> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              const Color(0xFF1E3A8A),
-              const Color(0xFF1E3A8A).withOpacity(0.8),
+              const Color.fromARGB(255, 30, 138, 44),
+              const Color.fromARGB(255, 30, 138, 44).withOpacity(0.8),
             ],
           ),
         ),
@@ -123,15 +123,15 @@ class AuthPageState extends State<AuthPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       const Icon(
-                        Icons.swap_horiz_rounded,
+                        Icons.shop_2,
                         size: 80,
-                        color: Color(0xFF1E3A8A),
+                        color: Color.fromARGB(255, 30, 138, 44),
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'TraderHub',
+                        'Thrifty',
                         style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          color: const Color(0xFF1E3A8A),
+                          color: const Color.fromARGB(255, 30, 138, 44),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -192,15 +192,24 @@ class AuthPageState extends State<AuthPage> {
                               children: [
                                 ElevatedButton(
                                   onPressed: _submitForm,
+                                  style: ButtonStyle(
+                                    // backgroundColor: 
+                                  ),
                                   child: Text(_isLogin ? 'Login' : 'Sign Up'),
                                 ),
                                 const SizedBox(height: 10),
                                 ElevatedButton(
                                   onPressed: _handleGoogleSignIn,
+                                  style: ButtonStyle(
+                                    // backgroundColor: 
+                                  ),
                                   child: const Text('Sign in with Google'),
                                 ),
                                 TextButton(
                                   onPressed: _toggleAuthMode,
+                                  style: ButtonStyle(
+                                    // backgroundColor: 
+                                  ),
                                   child: Text(
                                     _isLogin
                                         ? 'Create new account'

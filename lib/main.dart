@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:traderhub/main_screen.dart';
-import 'package:traderhub/profile_page.dart';
-import 'package:traderhub/your_requests_page.dart';
+import 'package:Thrifty/main_screen.dart';
+import 'package:Thrifty/profile_page.dart';
+import 'package:Thrifty/your_requests_page.dart';
 import 'home_page.dart';
 import 'auth_page.dart';
 import 'post_item_page.dart';
