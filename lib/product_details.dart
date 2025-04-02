@@ -290,7 +290,7 @@ class ProductDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    "This is a premium quality item available for trade. The item is in good condition and ready for a new owner.",
+                    product['description']??"This is a premium quality item available for trade. The item is in good condition and ready for a new owner.",
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[700],

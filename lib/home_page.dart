@@ -47,11 +47,12 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _loadItems() async {
     try {
-      List<Map<String, dynamic>> items = await _firestoreService.fetchItemsWithUsers();
-      
+      List<Map<String, dynamic>> items =
+          await _firestoreService.fetchItemsWithUsers();
+
       // Add a small delay to show the loading state (for demo purposes)
       await Future.delayed(const Duration(milliseconds: 800));
-      
+
       if (mounted) {
         setState(() {
           _items = items;
@@ -97,12 +98,13 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {},
                 ),
                 IconButton(
-                  icon: const Icon(Icons.notifications_outlined, color: Colors.white),
+                  icon: const Icon(Icons.notifications_outlined,
+                      color: Colors.white),
                   onPressed: () {},
                 ),
               ],
             ),
-            
+
             // Body Content
             SliverToBoxAdapter(
               child: _isLoading ? _buildLoadingUI() : _buildBodyContent(),
@@ -126,9 +128,9 @@ class _HomePageState extends State<HomePage> {
             color: Colors.white,
           ),
         ),
-        
+
         const SizedBox(height: 20),
-        
+
         // Loading section title
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -142,9 +144,9 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        
+
         const SizedBox(height: 10),
-        
+
         // Loading carousel items
         Shimmer.fromColors(
           baseColor: Colors.grey[300]!,
@@ -165,9 +167,9 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        
+
         const SizedBox(height: 20),
-        
+
         // Loading grid items
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -183,12 +185,11 @@ class _HomePageState extends State<HomePage> {
             itemCount: 4,
             itemBuilder: (context, index) {
               return Shimmer.fromColors(
-                baseColor: Colors.grey[300]!,
-                highlightColor: Colors.grey[100]!,
-                child: Container(
-                  color: Colors.white,
-                )
-              );
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
+                  child: Container(
+                    color: Colors.white,
+                  ));
             },
           ),
         ),
@@ -226,24 +227,24 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     }
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Banner section with facts
         _buildFactsBanner(),
-        
+
         const SizedBox(height: 24),
-        
+
         // Featured items carousel
         _buildSectionTitle("Featured Items"),
-        
+
         const SizedBox(height: 12),
-        
+
         _buildFeaturedItemsCarousel(),
-        
+
         const SizedBox(height: 24),
-        
+
         // All items grid
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -264,11 +265,11 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        
+
         const SizedBox(height: 8),
-        
+
         _buildItemsGrid(),
-        
+
         const SizedBox(height: 20),
       ],
     );
@@ -280,7 +281,7 @@ class _HomePageState extends State<HomePage> {
       child: CarouselSlider(
         options: CarouselOptions(
           autoPlay: true,
-          aspectRatio: 16/9,
+          aspectRatio: 16 / 9,
           viewportFraction: 1.0,
           onPageChanged: (index, reason) {
             setState(() {
@@ -310,7 +311,6 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     // Background pattern (circles)
                     Positioned(
-                     
                       child: Icon(
                         fact['icon'],
                         size: 180,
@@ -401,8 +401,8 @@ class _HomePageState extends State<HomePage> {
                       'image': item['image'] ?? "",
                       'price': item['original_cost'] ?? "0",
                       'user': user['name'] ?? "Unknown",
-                      'userId':item['user'],
-                      
+                      'userId': item['user'],
+                      'description': item['description'],
                       'location': user['city'] ?? "No Location",
                     },
                   ),
@@ -428,17 +428,20 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   // Item image
                   ClipRRect(
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(12)),
                     child: item['image'] != null
                         ? Image.network(
                             item['image'],
                             height: 120,
                             width: double.infinity,
                             fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) => Container(
+                            errorBuilder: (context, error, stackTrace) =>
+                                Container(
                               height: 120,
                               color: Colors.grey[200],
-                              child: const Icon(Icons.image_not_supported, color: Colors.grey),
+                              child: const Icon(Icons.image_not_supported,
+                                  color: Colors.grey),
                             ),
                           )
                         : Container(
@@ -521,7 +524,7 @@ class _HomePageState extends State<HomePage> {
         itemBuilder: (context, index) {
           final item = _items[index];
           final user = item['userDetails'] ?? {};
-          
+
           return GestureDetector(
             onTap: () {
               // Navigate to product details
@@ -535,6 +538,8 @@ class _HomePageState extends State<HomePage> {
                       'image': item['image'] ?? "",
                       'price': item['original_cost'] ?? "0",
                       'user': user['name'] ?? "Unknown",
+                      'userId': item['user'],
+                      'description': item['description'],
                       'location': user['city'] ?? "No Location",
                     },
                   ),
@@ -558,17 +563,20 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   // Item image
                   ClipRRect(
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(12)),
                     child: item['image'] != null
                         ? Image.network(
                             item['image'],
                             height: 130,
                             width: double.infinity,
                             fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) => Container(
+                            errorBuilder: (context, error, stackTrace) =>
+                                Container(
                               height: 130,
                               color: Colors.grey[200],
-                              child: const Icon(Icons.image_not_supported, color: Colors.grey),
+                              child: const Icon(Icons.image_not_supported,
+                                  color: Colors.grey),
                             ),
                           )
                         : Container(
