@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:traderhub/services/auth_service.dart';
+import 'package:traderhub/your_requests_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -15,41 +12,11 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  Future<String> _uploadImageToCloudinary(File imageFile) async {
-  try {
-    String cloudName = "dke7f8nkt";  // Your Cloudinary cloud name
-    String uploadPreset = "traderhub"; // Your Cloudinary preset
-    String apiUrl = "https://api.cloudinary.com/v1_1/$cloudName/image/upload";
-
-    var request = http.MultipartRequest("POST", Uri.parse(apiUrl));
-    request.fields['upload_preset'] = uploadPreset;
-    request.files.add(await http.MultipartFile.fromPath('file', imageFile.path));
-
-    var response = await request.send();
-    var responseData = await response.stream.bytesToString();
-    var jsonData = json.decode(responseData);
-
-    if (response.statusCode == 200) {
-      return jsonData['secure_url']; // Cloudinary image URL
-    } else {
-      print("Cloudinary upload failed: $jsonData");
-      return "";
-    }
-  } catch (e) {
-    print("Error uploading to Cloudinary: $e");
-    return "";
-  }
-}
-
-
+  final AuthService _authService = AuthService();
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
-  final TextEditingController _itemNameController = TextEditingController();
-  final TextEditingController _itemCostController = TextEditingController();
-
-  File? _image;
   String? _userName;
   String? _userCity;
 
@@ -76,7 +43,6 @@ class _ProfilePageState extends State<ProfilePage> {
         }
       }
     } catch (error) {
-      print("ERROROROROROR");
       print(error);
     }
   }
@@ -96,116 +62,116 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.camera);
-
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
-    }
-  }
-
-  Future<void> _postItem() async {
-  User? user = _auth.currentUser;
-  if (user == null || _image == null) return;
-
-  try {
-    print("Posting item...");
-
-    // Upload image to Cloudinary
-    String imageUrl = await _uploadImageToCloudinary(_image!);
-
-    if (imageUrl.isEmpty) {
-      throw "Image upload failed";
-    }
-
-    print("Image URL: $imageUrl");
-
-    // Store item details in Firestore
-    await _firestore.collection('items').add({
-      'item_name': _itemNameController.text,
-      'original_cost': _itemCostController.text,
-      'image': imageUrl,
-      'user': user.uid,
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Item posted successfully!")),
-    );
-
-    // Clear fields
-    _itemNameController.clear();
-    _itemCostController.clear();
-    setState(() {
-      _image = null;
-    });
-  } catch (e) {
-    print("Error posting item: $e");
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Failed to post item: $e")),
-    );
-  }
-}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Profile")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // User Profile Info
-              Text("Your Profile",
-                  style: Theme.of(context).textTheme.headlineLarge),
-              TextField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(labelText: "Name")),
-              TextField(
-                  controller: _cityController,
-                  decoration: const InputDecoration(labelText: "City")),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: _updateUserProfile,
-                child: const Text("Update Profile"),
+        appBar: AppBar(
+          title: const Text("Profile"),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.add_box_outlined),
+              onPressed: () => Navigator.pushNamed(context, '/post-item'),
+              color: Color(0xFFFFFFFF),
+            ),
+            // In the AppBar actions, add this before the logout button:
+            IconButton(
+              icon: const Icon(Icons.swap_horiz),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const YourRequestsPage()),
               ),
-
-              const Divider(),
-
-              // Post Item Section
-              Text("Post an Item",
-                  style: Theme.of(context).textTheme.headlineLarge),
-              TextField(
-                  controller: _itemNameController,
-                  decoration: const InputDecoration(labelText: "Item Name")),
-              TextField(
-                controller: _itemCostController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: "Original Cost"),
-              ),
-              const SizedBox(height: 10),
-
-              // Image Picker
-              _image == null
-                  ? ElevatedButton.icon(
-                      onPressed: _pickImage,
-                      icon: const Icon(Icons.camera),
-                      label: const Text("Take Photo"),
-                    )
-                  : Image.file(_image!, height: 150),
-
-              const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: _postItem,
-                child: const Text("Post Item"),
-              ),
-            ],
-          ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () {
+                _authService.signOut().then((_) {
+                  Navigator.pushReplacementNamed(context, '/auth');
+                }).catchError((error) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error signing out: $error')),
+                  );
+                });
+              },
+            ),
+          ],
         ),
-      ),
-    );
+        body: SingleChildScrollView(
+            child: Column(
+          children: [
+            Container(
+              color: const Color(0xFF1E3A8A),
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                children: [
+                  const CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Colors.white,
+                    child:
+                        Icon(Icons.person, size: 50, color: Color(0xFF1E3A8A)),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    _nameController.text,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Personal Information",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            controller: _nameController,
+                            decoration: const InputDecoration(
+                              labelText: "Name",
+                              prefixIcon: Icon(Icons.person_outline),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            controller: _cityController,
+                            decoration: const InputDecoration(
+                              labelText: "City",
+                              prefixIcon: Icon(Icons.location_city),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: _updateUserProfile,
+                              child: const Text("Update Profile"),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        )));
   }
 }

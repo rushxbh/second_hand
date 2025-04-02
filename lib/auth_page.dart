@@ -100,91 +100,115 @@ class AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(_isLogin ? 'Login' : 'Sign Up')),
-      body: Center(
-        child: Card(
-          margin: const EdgeInsets.all(20),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    if (_errorMessage != null) ...[
-                      Text(_errorMessage!, style: const TextStyle(color: Colors.red)),
-                      const SizedBox(height: 10),
-                    ],
-                    TextFormField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(labelText: 'Email'),
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value == null || value.isEmpty || !value.contains('@')) {
-                          return 'Enter a valid email';
-                        }
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: _passwordController,
-                      decoration: const InputDecoration(labelText: 'Password'),
-                      obscureText: true,
-                      validator: (value) {
-                        if (value == null || value.length < 6) {
-                          return 'Password must be at least 6 characters';
-                        }
-                        return null;
-                      },
-                    ),
-                    if (!_isLogin) ...[
-                      TextFormField(
-                        controller: _nameController,
-                        decoration: const InputDecoration(labelText: 'Name'),
-                        validator: (value) => value!.isEmpty ? 'Enter your name' : null,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              const Color(0xFF1E3A8A),
+              const Color(0xFF1E3A8A).withOpacity(0.8),
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: Card(
+            margin: const EdgeInsets.all(20),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      const Icon(
+                        Icons.swap_horiz_rounded,
+                        size: 80,
+                        color: Color(0xFF1E3A8A),
                       ),
-                      TextFormField(
-                        controller: _cityController,
-                        decoration: const InputDecoration(labelText: 'City'),
-                        validator: (value) => value!.isEmpty ? 'Enter your city' : null,
+                      const SizedBox(height: 16),
+                      Text(
+                        'TraderHub',
+                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          color: const Color(0xFF1E3A8A),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
+                      const SizedBox(height: 24),
                       TextFormField(
-                        controller: _ageController,
-                        decoration: const InputDecoration(labelText: 'Age'),
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value!.isEmpty || int.tryParse(value) == null) {
-                            return 'Enter a valid age';
-                          }
-                          return null;
-                        },
+                        controller: _emailController,
+                        decoration: const InputDecoration(
+                          labelText: 'Email',
+                          prefixIcon: Icon(Icons.email_outlined),
+                        ),
                       ),
-                    ],
-                    const SizedBox(height: 20),
-                    _isLoading
-                        ? const CircularProgressIndicator()
-                        : Column(
-                            children: [
-                              ElevatedButton(
-                                onPressed: _submitForm,
-                                child: Text(_isLogin ? 'Login' : 'Sign Up'),
-                              ),
-                              const SizedBox(height: 10),
-                              ElevatedButton(
-                                onPressed: _handleGoogleSignIn,
-                                child: const Text('Sign in with Google'),
-                              ),
-                              TextButton(
-                                onPressed: _toggleAuthMode,
-                                child: Text(
-                                  _isLogin
-                                      ? 'Create new account'
-                                      : 'I already have an account',
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _passwordController,
+                        decoration: const InputDecoration(
+                          labelText: 'Password',
+                          prefixIcon: Icon(Icons.lock_outlined),
+                        ),
+                        obscureText: true,
+                      ),
+                      const SizedBox(height: 24),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: _isLoading ? null : _submitForm,
+                          child: _isLoading
+                              ? const CircularProgressIndicator(color: Colors.white)
+                              : Text(_isLogin ? 'Login' : 'Sign Up'),
+                        ),
+                      ),
+                      if (!_isLogin) ...[
+                        TextFormField(
+                          controller: _nameController,
+                          decoration: const InputDecoration(labelText: 'Name'),
+                          validator: (value) => value!.isEmpty ? 'Enter your name' : null,
+                        ),
+                        TextFormField(
+                          controller: _cityController,
+                          decoration: const InputDecoration(labelText: 'City'),
+                          validator: (value) => value!.isEmpty ? 'Enter your city' : null,
+                        ),
+                        TextFormField(
+                          controller: _ageController,
+                          decoration: const InputDecoration(labelText: 'Age'),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value!.isEmpty || int.tryParse(value) == null) {
+                              return 'Enter a valid age';
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                      const SizedBox(height: 20),
+                      _isLoading
+                          ? const CircularProgressIndicator()
+                          : Column(
+                              children: [
+                                ElevatedButton(
+                                  onPressed: _submitForm,
+                                  child: Text(_isLogin ? 'Login' : 'Sign Up'),
                                 ),
-                              ),
-                            ],
-                          ),
+                                const SizedBox(height: 10),
+                                ElevatedButton(
+                                  onPressed: _handleGoogleSignIn,
+                                  child: const Text('Sign in with Google'),
+                                ),
+                                TextButton(
+                                  onPressed: _toggleAuthMode,
+                                  child: Text(
+                                    _isLogin
+                                        ? 'Create new account'
+                                        : 'I already have an account',
+                                  ),
+                                ),
+                              ],
+                            ),
                   ],
                 ),
               ),
@@ -192,6 +216,7 @@ class AuthPageState extends State<AuthPage> {
           ),
         ),
       ),
+    )
     );
   }
 }
