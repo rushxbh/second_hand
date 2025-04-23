@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'chat_page.dart';
 import 'services/chat_service.dart';
 
 class ProductDetailPage extends StatelessWidget {
@@ -32,11 +32,17 @@ class ProductDetailPage extends StatelessWidget {
 
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Buy request sent!')),
+          const SnackBar(
+            content: Text('Buy request sent!'),
+            backgroundColor: Color(0xFF6A1B9A),
+          ),
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Oops! Request not Sent: $e')),
+          SnackBar(
+            content: Text('Oops! Request not Sent: $e'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }
@@ -48,27 +54,41 @@ class ProductDetailPage extends StatelessWidget {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           title: const Text(
             'Place your Offer',
             style: TextStyle(
-              color: Color.fromARGB(255, 30, 138, 44),
+              color: Color(0xFF6A1B9A),
               fontWeight: FontWeight.bold,
+              fontSize: 20,
             ),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('Enter the amount you want to offer:'),
-              const SizedBox(height: 12),
+              const Text(
+                'Enter the amount you want to offer:',
+                style: TextStyle(fontSize: 16),
+              ),
+              const SizedBox(height: 16),
               TextField(
                 keyboardType: TextInputType.number,
                 controller: _amountController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Enter amount',
-                  prefixIcon: Icon(Icons.currency_rupee, color: Color.fromARGB(255, 30, 138, 44)),
-                  border: OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.currency_rupee, color: Color(0xFF6A1B9A)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  contentPadding: const EdgeInsets.symmetric(vertical: 16),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color.fromARGB(255, 30, 138, 44), width: 2),
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF6A1B9A), width: 2),
                   ),
                 ),
               ),
@@ -89,9 +109,15 @@ class ProductDetailPage extends StatelessWidget {
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 30, 138, 44),
+                backgroundColor: const Color(0xFF6A1B9A),
+                foregroundColor: Colors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               ),
-              child: const Text('Offer'),
+              child: const Text('Submit Offer'),
             ),
           ],
         ),
@@ -99,32 +125,32 @@ class ProductDetailPage extends StatelessWidget {
     }
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.topCenter, // We only want the top part to be green
-            colors: [
-              const Color.fromARGB(255, 30, 138, 44),
-              const Color.fromARGB(255, 30, 138, 44),
-            ],
-          ),
-        ),
+      backgroundColor: Colors.white,
+      body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            // Sliver app bar with image
+            // Custom app bar with image carousel
             SliverAppBar(
-              expandedHeight: 300,
+              expandedHeight: MediaQuery.of(context).size.height * 0.4,
+              floating: false,
               pinned: true,
-              backgroundColor: const Color.fromARGB(255, 30, 138, 44),
+              backgroundColor: Colors.white,
+              elevation: 0,
               leading: IconButton(
                 icon: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white,
                     shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 8,
+                        spreadRadius: 1,
+                      ),
+                    ],
                   ),
-                  child: const Icon(Icons.arrow_back, color: Colors.black87),
+                  child: const Icon(Icons.arrow_back, color: Color(0xFF6A1B9A)),
                 ),
                 onPressed: () => Navigator.pop(context),
               ),
@@ -133,10 +159,17 @@ class ProductDetailPage extends StatelessWidget {
                   icon: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white,
                       shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 8,
+                          spreadRadius: 1,
+                        ),
+                      ],
                     ),
-                    child: const Icon(Icons.favorite_border, color: Colors.black87),
+                    child: const Icon(Icons.favorite_border, color: Color(0xFF6A1B9A)),
                   ),
                   onPressed: () {},
                 ),
@@ -144,313 +177,480 @@ class ProductDetailPage extends StatelessWidget {
                   icon: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white,
                       shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 8,
+                          spreadRadius: 1,
+                        ),
+                      ],
                     ),
-                    child: const Icon(Icons.share, color: Colors.black87),
+                    child: const Icon(Icons.share, color: Color(0xFF6A1B9A)),
                   ),
                   onPressed: () {},
                 ),
+                const SizedBox(width: 8),
               ],
               flexibleSpace: FlexibleSpaceBar(
-                background: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    // Product image
-                    product['image'] != null && product['image'].isNotEmpty
-                        ? Image.network(
-                            product['image'],
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Container(
-                              color: Colors.grey[300],
-                              child: const Icon(Icons.image_not_supported,
-                                  size: 80, color: Colors.grey),
-                            ),
-                          )
-                        : Container(
-                            color: Colors.grey[300],
-                            child: const Icon(Icons.image,
-                                size: 80, color: Colors.grey),
+                background: Hero(
+                  tag: product['id'] ?? 'product-image',
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      // Product image
+                      ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(30),
+                          bottomRight: Radius.circular(30),
+                        ),
+                        child: product['image'] != null && product['image'].isNotEmpty
+                            ? Image.network(
+                                product['image'],
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) => Container(
+                                  color: Colors.grey[200],
+                                  child: const Icon(Icons.image_not_supported,
+                                      size: 100, color: Colors.grey),
+                                ),
+                              )
+                            : Container(
+                                color: Colors.grey[200],
+                                child: const Icon(Icons.image,
+                                    size: 100, color: Colors.grey),
+                              ),
+                      ),
+                      // Gradient overlay for better text visibility
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(30),
+                            bottomRight: Radius.circular(30),
                           ),
-                    // Gradient overlay for better text visibility
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.transparent,
-                            Colors.black.withOpacity(0.4),
-                          ],
-                          stops: const [0.7, 1.0],
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.5),
+                            ],
+                            stops: const [0.6, 1.0],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                      // Price badge
+                      Positioned(
+                        right: 20,
+                        bottom: 20,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF6A1B9A),
+                            borderRadius: BorderRadius.circular(50),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF6A1B9A).withOpacity(0.3),
+                                blurRadius: 8,
+                                spreadRadius: 1,
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            "₹${product['price']}",
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
 
             // Product details
             SliverToBoxAdapter(
-              child: Card(
-                margin: const EdgeInsets.all(0),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    topRight: Radius.circular(24),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Product name
-                          Expanded(
-                            child: Text(
-                              product['name'] ?? "Unknown Product",
-                              style: const TextStyle(
-                                fontSize: 24,
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Product title and category
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF6A1B9A).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            product['category'] ?? "Category",
+                            style: const TextStyle(
+                              color: Color(0xFF6A1B9A),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        Row(
+                          children: [
+                            const Icon(Icons.star, color: Colors.amber, size: 20),
+                            const SizedBox(width: 4),
+                            Text(
+                              "4.7",
+                              style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF333333),
+                                color: Colors.grey[800],
+                              ),
+                            ),
+                            Text(
+                              " (42 reviews)",
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    
+                    const SizedBox(height: 16),
+                    
+                    // Product name
+                    Text(
+                      product['name'] ?? "Unknown Product",
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF212121),
+                      ),
+                    ),
+                    
+                    const SizedBox(height: 24),
+                    
+                    // Seller Card
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            blurRadius: 10,
+                            spreadRadius: 0,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          // Seller avatar
+                          CircleAvatar(
+                            radius: 25,
+                            backgroundColor: const Color(0xFF6A1B9A).withOpacity(0.1),
+                            child: Text(
+                              (product['user'] ?? "U")[0].toUpperCase(),
+                              style: const TextStyle(
+                                color: Color(0xFF6A1B9A),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
                               ),
                             ),
                           ),
-                          // Price tag
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 30, 138, 44),
-                              borderRadius: BorderRadius.circular(20),
+                          const SizedBox(width: 16),
+                          // Seller details
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  product['user'] ?? "Unknown Seller",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Color(0xFF212121),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.location_on,
+                                      size: 14,
+                                      color: Color(0xFF6A1B9A),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      product['location'] ?? "Unknown location",
+                                      style: TextStyle(
+                                        color: Colors.grey[700],
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                            child: Text(
-                              "₹${product['price']}",
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                          ),
+                          // Chat button
+                          InkWell(
+                            onTap: () async {
+                              // First, make sure we have a valid user ID
+                              final sellerId = product['userId'];
+                              if (sellerId == null || sellerId.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Cannot start chat: Seller information is missing'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                                return;
+                              }
+
+                              // Create a chat room
+                              final chatService = ChatService();
+                              try {
+                                // Create or get the chat room ID
+                                final chatRoomId = await chatService.createChatRoom(sellerId);
+
+                                // Make sure chatRoomId is not empty
+                                if (chatRoomId.isEmpty) {
+                                  throw Exception("Failed to create chat room");
+                                }
+                                
+                                // Navigate to ChatPage directly
+                                Navigator.push(
+                                  context, 
+                                  MaterialPageRoute(
+                                    builder: (context) => ChatPage(
+                                      chatRoomId: chatRoomId,
+                                      otherUserId: sellerId,
+                                      otherUserName: product['user'] ?? 'User',
+                                    ),
+                                  ),
+                                );
+                              } catch (e) {
+                                print('Chat error: $e'); // Print to console for debugging
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Error starting chat: $e'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF6A1B9A).withOpacity(0.1),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.chat_bubble_outline,
+                                color: Color(0xFF6A1B9A),
                               ),
                             ),
                           ),
                         ],
                       ),
+                    ),
 
-                      const SizedBox(height: 16),
-
-                      // Seller information
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[50],
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.grey.shade200),
-                        ),
-                        child: Row(
-                          children: [
-                            // Seller avatar
-                            Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 30, 138, 44).withOpacity(0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Center(
-                                child: Icon(Icons.person,
-                                    color: Color.fromARGB(255, 30, 138, 44), size: 30),
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            // Seller details
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    product['user'] ?? "Unknown Seller",
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    product['location'] ?? "Unknown location",
-                                    style: TextStyle(
-                                      color: Colors.grey[700],
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            // Contact button
-                            Container(
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 30, 138, 44).withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: IconButton(
-                                icon: const Icon(Icons.message_outlined,
-                                    color: Color.fromARGB(255, 30, 138, 44)),
-                                onPressed: () {},
-                              ),
-                            ),
-                          ],
-                        ),
+                    const SizedBox(height: 24),
+                    
+                    // Product description section
+                    const Text(
+                      "Description",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF212121),
                       ),
-
-                      const SizedBox(height: 24),
-
-                      // Product description section
-                      const Text(
-                        "About this item",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 30, 138, 44),
-                        ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      product['description'] ??
+                          "This is a premium quality item available for trade. The item is in good condition and ready for a new owner.",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey[700],
+                        height: 1.6,
                       ),
-                      const SizedBox(height: 12),
-                      Text(
-                        product['description'] ??
-                            "This is a premium quality item available for trade. The item is in good condition and ready for a new owner.",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.grey[700],
-                          height: 1.5,
-                        ),
+                    ),
+
+                    const SizedBox(height: 24),
+                    
+                    // Features section
+                    const Text(
+                      "Highlights",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF212121),
                       ),
+                    ),
+                    const SizedBox(height: 16),
+                    
+                    // Feature pills
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: [
+                        _buildFeaturePill("Certified Genuine"),
+                        _buildFeaturePill("Top Quality"),
+                        _buildFeaturePill("Free Delivery"),
+                        _buildFeaturePill("7-day Returns"),
+                      ],
+                    ),
 
-                      const SizedBox(height: 24),
-
-                      // Trading information
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 30, 138, 44).withOpacity(0.05),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: const Color.fromARGB(255, 30, 138, 44).withOpacity(0.2),
+                    const SizedBox(height: 24),
+                    
+                    // Trading information in a nicer format
+                    const Text(
+                      "Listing Details",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF212121),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            blurRadius: 10,
+                            spreadRadius: 0,
+                            offset: const Offset(0, 2),
                           ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "Trading Information",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 30, 138, 44),
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            _buildInfoRow(
-                                Icons.calendar_today, "Listed", "3 days ago"),
-                            _buildInfoRow(Icons.visibility, "Views", "24"),
-                            _buildInfoRow(
-                                Icons.touch_app, "Interested", "5 people"),
-                          ],
-                        ),
+                        ],
                       ),
-
-                      const SizedBox(height: 40),
-                    ],
-                  ),
+                      child: Column(
+                        children: [
+                          _buildInfoRowNew(Icons.calendar_today, "Listed", "3 days ago"),
+                          const Divider(height: 24),
+                          _buildInfoRowNew(Icons.visibility, "Views", "24"),
+                          const Divider(height: 24),
+                          _buildInfoRowNew(Icons.favorite, "Interested", "5 people"),
+                          const Divider(height: 24),
+                          _buildInfoRowNew(Icons.local_shipping_outlined, "Shipping", "Free Delivery"),
+                        ],
+                      ),
+                    ),
+                    
+                    const SizedBox(height: 80), // Extra space for button
+                  ],
                 ),
               ),
             ),
           ],
         ),
       ),
+      
+      // Bottom bar with buy button
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 1,
-              blurRadius: 5,
-              offset: const Offset(0, -3),
+              spreadRadius: 0,
+              blurRadius: 10,
+              offset: const Offset(0, -2),
             ),
           ],
         ),
         child: Row(
           children: [
             // Chat button
-            Expanded(
-                flex: 1,
-                child: OutlinedButton.icon(
-                  onPressed: () async {
-                    // First, make sure we have a valid user ID
-                    final sellerId = product['userId'];
-                    if (sellerId == null || sellerId.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text(
-                                'Cannot start chat: Seller information is missing')),
-                      );
-                      return;
-                    }
-
-                    // Create a chat room
-                    final chatService = ChatService();
-                    try {
-                      // Create or get the chat room ID
-                      final chatRoomId =
-                          await chatService.createChatRoom(sellerId);
-
-                      // Make sure chatRoomId is not empty
-                      if (chatRoomId.isEmpty) {
-                        throw Exception("Failed to create chat room");
-                      }
-
-                      // Navigate to chat page with proper parameters
-                      Navigator.pushNamed(context, '/chat', arguments: {
-                        'chatRoomId': chatRoomId,
-                        'userId': sellerId,
-                        'userName': product['user'] ?? 'User'
-                      });
-                    } catch (e) {
-                      print('Chat error: $e'); // Print to console for debugging
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Error starting chat: $e')),
-                      );
-                    }
-                  },
-                  icon: const Icon(Icons.chat_bubble_outline),
-                  label: const Text("Chat"),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: const Color(0xFF1E3A8A),
-                    side: const BorderSide(color: Color(0xFF1E3A8A)),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                  ),
-                ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(50),
+                border: Border.all(color: const Color(0xFF6A1B9A)),
               ),
-            const SizedBox(width: 12),
-            // Make offer button
+              child: IconButton(
+                icon: const Icon(Icons.chat_outlined, color: Color(0xFF6A1B9A)),
+                onPressed: () async {
+                  // First, make sure we have a valid user ID
+                  final sellerId = product['userId'];
+                  if (sellerId == null || sellerId.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Cannot start chat: Seller information is missing'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    return;
+                  }
+
+                  // Create a chat room
+                  final chatService = ChatService();
+                  try {
+                    // Create or get the chat room ID
+                    final chatRoomId = await chatService.createChatRoom(sellerId);
+
+                    // Make sure chatRoomId is not empty
+                    if (chatRoomId.isEmpty) {
+                      throw Exception("Failed to create chat room");
+                    }
+                    
+                    // Navigate to ChatPage directly
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(
+                        builder: (context) => ChatPage(
+                          chatRoomId: chatRoomId,
+                          otherUserId: sellerId,
+                          otherUserName: product['user'] ?? 'User',
+                        ),
+                      ),
+                    );
+                  } catch (e) {
+                    print('Chat error: $e'); // Print to console for debugging
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Error starting chat: $e'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+            const SizedBox(width: 16),
+            // Buy button
             Expanded(
-              flex: 2,
-              child: ElevatedButton.icon(
+              child: ElevatedButton(
                 onPressed: () {
                   _showTradeDialog(context);
                 },
-                icon: const Icon(Icons.handshake_outlined),
-                label: const Text("Buy"),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 30, 138, 44),
+                  backgroundColor: const Color(0xFF6A1B9A),
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  elevation: 0,
+                ),
+                child: const Text(
+                  "Buy Now",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -461,12 +661,67 @@ class ProductDetailPage extends StatelessWidget {
     );
   }
 
+  Widget _buildFeaturePill(String text) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: const Color(0xFF6A1B9A).withOpacity(0.08),
+        borderRadius: BorderRadius.circular(50),
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: Color(0xFF6A1B9A),
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRowNew(IconData icon, String label, String value) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: const Color(0xFF6A1B9A).withOpacity(0.08),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(
+            icon,
+            size: 20,
+            color: const Color(0xFF6A1B9A),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontSize: 16,
+              color: Color(0xFF616161),
+            ),
+          ),
+        ),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF212121),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Deprecated - kept for reference
   Widget _buildInfoRow(IconData icon, String label, String value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: const Color.fromARGB(255, 30, 138, 44)),
+          Icon(icon, size: 16, color: const Color(0xFF6A1B9A)),
           const SizedBox(width: 8),
           Text(
             "$label: ",
