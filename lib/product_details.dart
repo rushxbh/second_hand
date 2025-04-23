@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'services/chat_service.dart';
+
 class ProductDetailPage extends StatelessWidget {
   final Map<String, dynamic> product;
   final TextEditingController _amountController = TextEditingController();
@@ -385,21 +387,54 @@ class ProductDetailPage extends StatelessWidget {
           children: [
             // Chat button
             Expanded(
-              flex: 1,
-              child: OutlinedButton.icon(
-                onPressed: () {
-                  final Uri whatsappUrl = Uri.parse("https://wa.me/918856875861");
-                  launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
-                },
-                icon: const Icon(Icons.chat_bubble_outline),
-                label: const Text("Chat"),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color.fromARGB(255, 30, 138, 44),
-                  side: const BorderSide(color: Color.fromARGB(255, 30, 138, 44)),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                flex: 1,
+                child: OutlinedButton.icon(
+                  onPressed: () async {
+                    // First, make sure we have a valid user ID
+                    final sellerId = product['userId'];
+                    if (sellerId == null || sellerId.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text(
+                                'Cannot start chat: Seller information is missing')),
+                      );
+                      return;
+                    }
+
+                    // Create a chat room
+                    final chatService = ChatService();
+                    try {
+                      // Create or get the chat room ID
+                      final chatRoomId =
+                          await chatService.createChatRoom(sellerId);
+
+                      // Make sure chatRoomId is not empty
+                      if (chatRoomId.isEmpty) {
+                        throw Exception("Failed to create chat room");
+                      }
+
+                      // Navigate to chat page with proper parameters
+                      Navigator.pushNamed(context, '/chat', arguments: {
+                        'chatRoomId': chatRoomId,
+                        'userId': sellerId,
+                        'userName': product['user'] ?? 'User'
+                      });
+                    } catch (e) {
+                      print('Chat error: $e'); // Print to console for debugging
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Error starting chat: $e')),
+                      );
+                    }
+                  },
+                  icon: const Icon(Icons.chat_bubble_outline),
+                  label: const Text("Chat"),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: const Color(0xFF1E3A8A),
+                    side: const BorderSide(color: Color(0xFF1E3A8A)),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
                 ),
               ),
-            ),
             const SizedBox(width: 12),
             // Make offer button
             Expanded(

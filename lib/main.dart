@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:Thrifty/main_screen.dart';
 import 'package:Thrifty/profile_page.dart';
 import 'package:Thrifty/your_requests_page.dart';
+import 'chat_list_page.dart';
+import 'chat_page.dart';
 import 'home_page.dart';
 import 'auth_page.dart';
 import 'post_item_page.dart';
@@ -74,6 +76,19 @@ class BarterApp extends StatelessWidget {
         '/post-item': (context) => const PostItemPage(),
         // Add this to your routes map
         '/requests': (context) => const YourRequestsPage(),
+        '/chat-list': (context) => const ChatListPage(),
+        '/chat': (context) => ChatPage(
+              chatRoomId: (ModalRoute.of(context)?.settings.arguments
+                      as Map<String, dynamic>)['chatRoomId'] ??
+                  '',
+              otherUserId: (ModalRoute.of(context)?.settings.arguments
+                      as Map<String, dynamic>)['userId'] ??
+                  '',
+              otherUserName: (ModalRoute.of(context)?.settings.arguments
+                      as Map<String, dynamic>)['userName'] ??
+                  'User',
+            ),      
+      
       },
     );
   }
