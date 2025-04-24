@@ -21,7 +21,7 @@ class ProductDetailPage extends StatelessWidget {
       if (currentUser == null) return;
 
       try {
-        await FirebaseFirestore.instance.collection('trade_requests').add({
+        await FirebaseFirestore.instance.collection('requests').add({
           'senderId': currentUser.uid,
           'receiverId': product['userId'],
           'offeredItemId': offeredItemId,

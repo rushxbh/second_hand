@@ -102,7 +102,7 @@ class _YourRequestsPageState extends State<YourRequestsPage> {
 
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore
-          .collection('trade_requests')
+          .collection('requests')
           .where(incoming ? 'receiverId' : 'senderId', isEqualTo: userId)
           .snapshots(),
       builder: (context, snapshot) {
@@ -686,7 +686,7 @@ class _YourRequestsPageState extends State<YourRequestsPage> {
 
   Future<void> _updateRequestStatus(String requestId, String status) async {
     try {
-      await _firestore.collection('trade_requests').doc(requestId).update({
+      await _firestore.collection('requests').doc(requestId).update({
         'status': status,
         'updatedAt': FieldValue.serverTimestamp(),
       });

@@ -59,17 +59,17 @@ class AuthPageState extends State<AuthPage> {
       } else {
         // Sign up with email and password
         user = await _authService.signUp(
-          _emailController.text.trim(),
-          _passwordController.text.trim(),
-          _nameController.text.trim(),
-          _cityController.text.trim()
-        );
+            _emailController.text.trim(),
+            _passwordController.text.trim(),
+            _nameController.text.trim(),
+            _cityController.text.trim());
       }
 
       if (user != null) {
         Navigator.pushReplacementNamed(context, '/home');
       } else {
-        setState(() => _errorMessage = "Authentication failed. Please try again.");
+        setState(
+            () => _errorMessage = "Authentication failed. Please try again.");
       }
     } catch (e) {
       setState(() => _errorMessage = e.toString());
@@ -115,7 +115,7 @@ class AuthPageState extends State<AuthPage> {
               ),
             ),
           ),
-          
+
           // Background pattern
           Positioned(
             top: -100,
@@ -141,7 +141,7 @@ class AuthPageState extends State<AuthPage> {
               ),
             ),
           ),
-          
+
           SafeArea(
             child: SingleChildScrollView(
               child: Padding(
@@ -150,7 +150,7 @@ class AuthPageState extends State<AuthPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const SizedBox(height: 40),
-                    
+
                     // App logo and name
                     Center(
                       child: Container(
@@ -173,9 +173,9 @@ class AuthPageState extends State<AuthPage> {
                         ),
                       ),
                     ),
-                    
+
                     const SizedBox(height: 24),
-                    
+
                     Text(
                       'Thrifty',
                       textAlign: TextAlign.center,
@@ -193,9 +193,9 @@ class AuthPageState extends State<AuthPage> {
                         ],
                       ),
                     ),
-                    
+
                     const SizedBox(height: 8),
-                    
+
                     Text(
                       _isLogin ? 'Welcome back!' : 'Create your account',
                       textAlign: TextAlign.center,
@@ -204,9 +204,9 @@ class AuthPageState extends State<AuthPage> {
                         color: Colors.white.withOpacity(0.9),
                       ),
                     ),
-                    
+
                     const SizedBox(height: 40),
-                    
+
                     // Auth form
                     Container(
                       padding: const EdgeInsets.all(24),
@@ -232,124 +232,142 @@ class AuthPageState extends State<AuthPage> {
                               decoration: InputDecoration(
                                 labelText: 'Email',
                                 labelStyle: TextStyle(color: Colors.grey[700]),
-                                prefixIcon: const Icon(Icons.email_outlined, color: Color(0xFF6A1B9A)),
+                                prefixIcon: const Icon(Icons.email_outlined,
+                                    color: Color(0xFF6A1B9A)),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide.none,
                                 ),
                                 filled: true,
                                 fillColor: Colors.grey[100],
-                                contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                                contentPadding:
+                                    const EdgeInsets.symmetric(vertical: 16),
                               ),
                               keyboardType: TextInputType.emailAddress,
                             ),
-                            
+
                             const SizedBox(height: 16),
-                            
+
                             // Password input
                             TextFormField(
                               controller: _passwordController,
                               decoration: InputDecoration(
                                 labelText: 'Password',
                                 labelStyle: TextStyle(color: Colors.grey[700]),
-                                prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF6A1B9A)),
+                                prefixIcon: const Icon(Icons.lock_outline,
+                                    color: Color(0xFF6A1B9A)),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide.none,
                                 ),
                                 filled: true,
                                 fillColor: Colors.grey[100],
-                                contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                                contentPadding:
+                                    const EdgeInsets.symmetric(vertical: 16),
                               ),
                               obscureText: true,
                             ),
-                            
+
                             if (!_isLogin) ...[
                               const SizedBox(height: 16),
-                              
+
                               // Name input
                               TextFormField(
                                 controller: _nameController,
                                 decoration: InputDecoration(
                                   labelText: 'Full Name',
-                                  labelStyle: TextStyle(color: Colors.grey[700]),
-                                  prefixIcon: const Icon(Icons.person_outline, color: Color(0xFF6A1B9A)),
+                                  labelStyle:
+                                      TextStyle(color: Colors.grey[700]),
+                                  prefixIcon: const Icon(Icons.person_outline,
+                                      color: Color(0xFF6A1B9A)),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                     borderSide: BorderSide.none,
                                   ),
                                   filled: true,
                                   fillColor: Colors.grey[100],
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                                  contentPadding:
+                                      const EdgeInsets.symmetric(vertical: 16),
                                 ),
-                                validator: (value) => value!.isEmpty ? 'Enter your name' : null,
+                                validator: (value) =>
+                                    value!.isEmpty ? 'Enter your name' : null,
                               ),
-                              
+
                               const SizedBox(height: 16),
-                              
+
                               // City input
                               TextFormField(
                                 controller: _cityController,
                                 decoration: InputDecoration(
                                   labelText: 'City',
-                                  labelStyle: TextStyle(color: Colors.grey[700]),
-                                  prefixIcon: const Icon(Icons.location_city, color: Color(0xFF6A1B9A)),
+                                  labelStyle:
+                                      TextStyle(color: Colors.grey[700]),
+                                  prefixIcon: const Icon(Icons.location_city,
+                                      color: Color(0xFF6A1B9A)),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                     borderSide: BorderSide.none,
                                   ),
                                   filled: true,
                                   fillColor: Colors.grey[100],
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                                  contentPadding:
+                                      const EdgeInsets.symmetric(vertical: 16),
                                 ),
-                                validator: (value) => value!.isEmpty ? 'Enter your city' : null,
+                                validator: (value) =>
+                                    value!.isEmpty ? 'Enter your city' : null,
                               ),
-                              
+
                               const SizedBox(height: 16),
-                              
+
                               // Age input
                               TextFormField(
                                 controller: _ageController,
                                 decoration: InputDecoration(
                                   labelText: 'Age',
-                                  labelStyle: TextStyle(color: Colors.grey[700]),
-                                  prefixIcon: const Icon(Icons.cake_outlined, color: Color(0xFF6A1B9A)),
+                                  labelStyle:
+                                      TextStyle(color: Colors.grey[700]),
+                                  prefixIcon: const Icon(Icons.cake_outlined,
+                                      color: Color(0xFF6A1B9A)),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                     borderSide: BorderSide.none,
                                   ),
                                   filled: true,
                                   fillColor: Colors.grey[100],
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                                  contentPadding:
+                                      const EdgeInsets.symmetric(vertical: 16),
                                 ),
                                 keyboardType: TextInputType.number,
                                 validator: (value) {
-                                  if (value!.isEmpty || int.tryParse(value) == null) {
+                                  if (value!.isEmpty ||
+                                      int.tryParse(value) == null) {
                                     return 'Enter a valid age';
                                   }
                                   return null;
                                 },
                               ),
                             ],
-                            
+
                             if (_errorMessage != null) ...[
                               const SizedBox(height: 16),
                               Text(
                                 _errorMessage!,
-                                style: const TextStyle(color: Colors.red, fontSize: 14),
+                                style: const TextStyle(
+                                    color: Colors.red, fontSize: 14),
                                 textAlign: TextAlign.center,
                               ),
                             ],
-                            
+
                             const SizedBox(height: 24),
-                            
+
                             // Login/Sign up button
                             ElevatedButton(
                               onPressed: _isLoading ? null : _submitForm,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF6A1B9A),
                                 foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -361,7 +379,9 @@ class AuthPageState extends State<AuthPage> {
                                       width: 20,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
-                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                Colors.white),
                                       ),
                                     )
                                   : Text(
@@ -373,15 +393,17 @@ class AuthPageState extends State<AuthPage> {
                                       ),
                                     ),
                             ),
-                            
+
                             const SizedBox(height: 16),
-                            
+
                             // Sign in with Google button
                             OutlinedButton.icon(
-                              onPressed: _isLoading ? null : _handleGoogleSignIn,
+                              onPressed:
+                                  _isLoading ? null : _handleGoogleSignIn,
                               style: OutlinedButton.styleFrom(
                                 side: const BorderSide(color: Colors.white),
-                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -389,8 +411,8 @@ class AuthPageState extends State<AuthPage> {
                               ),
                               icon: Image.network(
                                 'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg',
-                                height: 18,
-                                width: 18,
+                                height: 16,
+                                width: 16,
                               ),
                               label: const Text(
                                 'Continue with Google',
@@ -404,9 +426,9 @@ class AuthPageState extends State<AuthPage> {
                         ),
                       ),
                     ),
-                    
+
                     const SizedBox(height: 24),
-                    
+
                     // Toggle login/signup mode
                     TextButton(
                       onPressed: _toggleAuthMode,
@@ -421,7 +443,7 @@ class AuthPageState extends State<AuthPage> {
                         ),
                       ),
                     ),
-                    
+
                     const SizedBox(height: 24),
                   ],
                 ),
